@@ -2,6 +2,10 @@
 
 public struct Vector2d
 {
+    public static readonly Vector2d Zero = new Vector2d();
+    public static readonly Vector2d UnitX = new Vector2d(1,0);
+    public static readonly Vector2d UnitY = new Vector2d(0,1);
+
     public float X;
     public float Y;
 
@@ -40,6 +44,15 @@ public struct Vector2d
     public static Vector2d operator /(Vector2d v1, float m)
     {
         return new Vector2d(v1.X / m, v1.Y / m);
+    }
+
+    public static bool operator ==(Vector2d v1, Vector2d v2)
+    {
+        return v1.X == v2.X && v1.Y == v2.Y;
+    }
+    public static bool operator !=(Vector2d v1, Vector2d v2)
+    {
+        return v1.X != v2.X || v1.Y != v2.Y;
     }
 
     public static float Distance(Vector2d v1, Vector2d v2)

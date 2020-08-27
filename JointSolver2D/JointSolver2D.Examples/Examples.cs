@@ -7,9 +7,24 @@ using JointSolver2D;
 
 namespace JointSolver2D.Examples
 {
-    public static class Examples
+    public interface IExample
     {
-        public static JointAnalysis RightArrow_2Bar()
+        string Name { get; }
+
+        JointAnalysis DoAnalysis();
+
+        double[] ExpectedBarForces { get; }
+    }
+
+    public class RightArrow_2Bar_Example : IExample
+    {
+        public string Name => "RightArrow 2Bar";
+
+        private double[] _ExpectedBarForces => new double[] { 0.71, -0.71 };
+
+        public double[] ExpectedBarForces => _ExpectedBarForces;
+
+        public JointAnalysis DoAnalysis()
         {
             var lowerSupportNode = new JSNode(new Vector2d(0, 0)) { XRestrained = true, YRestrained = true };
             var upperSupportNode = new JSNode(new Vector2d(0, 10)) { XRestrained = true, YRestrained = true };

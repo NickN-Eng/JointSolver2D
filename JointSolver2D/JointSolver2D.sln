@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29519.87
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JointSolver2D", "JointSolver2D\JointSolver2D.csproj", "{3A1F3E54-1089-4DBD-A340-F933E7AF828C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JointSolver2D", "JointSolver2D\JointSolver2D.csproj", "{3A1F3E54-1089-4DBD-A340-F933E7AF828C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JointSolver2D.Examples", "JointSolver2D.Examples\JointSolver2D.Examples.csproj", "{CE19A3EB-9CE0-4653-A360-137E98E0E8BD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JointSolver2D.ResultsViewer.Winforms", "JointSolver2D.ResultsViewer.Winforms\JointSolver2D.ResultsViewer.Winforms.csproj", "{9512B206-5552-450A-B046-5E36303B2AEB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{CE19A3EB-9CE0-4653-A360-137E98E0E8BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CE19A3EB-9CE0-4653-A360-137E98E0E8BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CE19A3EB-9CE0-4653-A360-137E98E0E8BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9512B206-5552-450A-B046-5E36303B2AEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9512B206-5552-450A-B046-5E36303B2AEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9512B206-5552-450A-B046-5E36303B2AEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9512B206-5552-450A-B046-5E36303B2AEB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
