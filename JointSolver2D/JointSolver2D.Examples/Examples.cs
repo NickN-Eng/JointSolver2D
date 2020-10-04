@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using JointSolver2D;
-
+using JointSolver2D.Accord;
 namespace JointSolver2D.Examples
 {
     public interface IExample
@@ -38,7 +38,7 @@ namespace JointSolver2D.Examples
             var upperBar = new JSBar(upperSupportNode, forceNode);
             var bars = new JSBar[] { upperBar, lowerBar };
 
-            var analyser = new JointAnalysis();
+            var analyser = new JointAnalysis(new LeastSq_Solver());
             analyser.AddItems(bars, nodes, forces);
             analyser.Solve();
             return analyser;

@@ -49,6 +49,10 @@ namespace JointSolver2D
             YRestrained = yRestrained;
         }
 
+        /// <summary>
+        /// Resets the variables before they are populated by an analysis run.
+        /// </summary>
+        /// <param name="newNumber"></param>
         public void Reset(int newNumber = -1)
         {
             Number = newNumber;

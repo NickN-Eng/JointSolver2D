@@ -18,7 +18,7 @@ namespace JointSolver2D
         public JointAnalysis(SolverBase solver = null)
         {
             if (solver == null)
-                Solver = new Accord_LeastSquares_Solver();
+                Solver = new SparseArray_Solver();
             else
                 Solver = solver;
         }
@@ -147,7 +147,7 @@ namespace JointSolver2D
 
         public void Solve()
         {
-            Solver.Solve(this);
+            Solver.SolveForces(this);
             return;
         }
 

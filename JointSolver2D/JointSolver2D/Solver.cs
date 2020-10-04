@@ -1,40 +1,71 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace JointSolver2D
 {
-    //TODO:
-    //Common method to print matrices - e.g. into an array for tabular view??
-
     /// <summary>
     /// A template for solver functions
     /// </summary>
     public abstract class SolverBase
     {
         /// <summary>
-        /// Step 1: Initalises
+        /// Initalises the internal arrays A and B used by the solver implementation
+        /// A size is [NumberOfEquations,NumberOfUnknowns], B length is NumberOfEquations
+        /// (Used in step 1 of solver process).
         /// </summary>
         protected abstract void SetupMatrices();
 
         /// <summary>
-        /// Step 2: Add to the 
+        /// The implementation should insert a value into matrix A. (Used in step 2 of solver process).
         /// </summary>
-        /// <param name="rowIndex"></param>
-        /// <param name="columnIndex"></param>
-        /// <param name="value"></param>
         protected abstract void AddToMatrixA(int rowIndex, int columnIndex, double value);
-        protected abstract void AddToVectorB(int rowIndex, double value);
-        
+
         /// <summary>
-        /// Step 3: 
+        /// The implementation should insert a value into vector B. (Used in step 2 of solver process).
+        /// </summary>
+        protected abstract void AddToVectorB(int rowIndex, double value);
+
+        /// <summary>
+        /// The implementation should solves the matrix equation Ax=B, and returns the force vector X (Used in step 3 of solver process).
         /// </summary>
         /// <returns>Returns the matrix X result.</returns>
         protected abstract double[] SolveForMatrixX();
 
+
+        /// <summary>
+        /// The implementation should solve the matrix equation Ax=B, given the supplied force vector b.
+        /// Used in step 4, for the displacement step (virtual work method).
+        /// </summary>
+        /// <returns>Returns the matrix X result.</returns>
+        protected abstract double[] SolveXForGivenB(double[] vectorB);
+
+        /// <summary>
+        /// The number of equations, i.e. number of rows of matrix A, and the length of vector B.
+        /// This value is populated before step 1 - SetupMatrices()
+        /// </summary>
         protected int NumberOfEquations { get; private set; }
+
+        /// <summary>
+        /// The number of equations, i.e. number of columns of matrix A.
+        /// This value is populated before step 1 - SetupMatrices()
+        /// </summary>
         protected int NumberOfUnknowns { get; private set; }
 
-        public void Solve(JointAnalysis jointAnalysis)
+        /// <summary> Matrix A (for debug only). </summary>
+        public abstract double[,] A_Array { get; }
+        
+        /// <summary> Vector B (for debug only). </summary>
+        public abstract double[] B_Array { get; }
+
+        /// <summary> Vector X (for debug only). </summary>
+        public double[] X_Array { get; private set; }
+
+        /// <summary>
+        /// Performs the analysis: populates bars with bar forces and nodes with node reactions.
+        /// </summary>
+        /// <param name="jointAnalysis">The joint analysis to be updated.</param>
+        public void SolveForces(JointAnalysis jointAnalysis)
         {
             var Nodes = jointAnalysis.Nodes;
             var Bars = jointAnalysis.Bars;
@@ -79,8 +110,6 @@ namespace JointSolver2D
 
             if (NumberOfEquations < variableNumber) throw new Exception("Number of unknowns exceeds the number of equations");
 
-
-
             //Unknowns list
             //Bars 0 => n
             //Reactions 0 => n
@@ -111,6 +140,8 @@ namespace JointSolver2D
             {
                 bar.ForceResult = (float)xResult[bar.Number];
             }
+
+            X_Array = xResult;
         }
 
         private void AddNodeXEquilibrium(JSNode node, int equationRowNo)
@@ -187,6 +218,96 @@ namespace JointSolver2D
             }
             AddToVectorB(equationRowNo, -totalAppliedMoment);
         }
+
+        public void SolveDeflections()
+        {
+
+        }
+
+
+        #region Matrix Printing
+
+        public const string PrintFormat = "F2";
+        public const int PrintNumberLen = 7;
+
+        public string GetDebugString_MatrixA()
+        {
+            List<string> strings = new List<string>();
+            AddArrayToDebugString(strings, A_Array);
+            return string.Join(Environment.NewLine, strings);
+        }
+
+        public string GetDebugString_MatrixAB()
+        {
+            List<string> strings = new List<string>();
+            AddArrayToDebugString(strings, A_Array);
+            AddArrayToDebugString(strings, B_Array, "   ");
+            return string.Join(Environment.NewLine, strings);
+        }
+
+        public string GetDebugString_MatrixAXB()
+        {
+            List<string> strings = new List<string>();
+            AddArrayToDebugString(strings, A_Array);
+            AddArrayToDebugString(strings, X_Array, "   ");
+            AddArrayToDebugString(strings, B_Array, "   ");
+            return string.Join(Environment.NewLine, strings);
+        }
+
+        private void AddArrayToDebugString(List<string> wipStrings, double[,] array, string separator = "")
+        {
+            int rowLength = array.GetLength(0);
+            int colLength = array.GetLength(1);
+
+            PrepareWipStrings(wipStrings, rowLength, separator);
+
+            for (int i = 0; i < rowLength; i++)
+            {
+                for (int j = 0; j < colLength; j++)
+                {
+                    var value = array[i, j];
+                    wipStrings[i] += value.ToString(PrintFormat).PadLeft(PrintNumberLen);
+                }
+            }
+        }
+
+        private void AddArrayToDebugString(List<string> wipStrings, double[] array, string separator = "")
+        {
+            int rowLength = array.Length;
+
+            PrepareWipStrings(wipStrings, rowLength, separator);
+
+            for (int i = 0; i < rowLength; i++)
+            {
+                var value = array[i];
+                wipStrings[i] += value.ToString(PrintFormat).PadLeft(PrintNumberLen);
+            }
+        }
+
+        private static void PrepareWipStrings(List<string> wipStrings, int rowLength, string separator)
+        {
+            if (wipStrings.Count == 0)
+            {
+                for (int i = 0; i < rowLength; i++)
+                {
+                    wipStrings.Add(separator);
+                }
+            }
+            else
+            {
+                int topStringLen = wipStrings[0].Length;
+
+                for (int i = 0; i < rowLength; i++)
+                {
+                    if (i < wipStrings.Count)
+                        wipStrings[i] += new string(' ', topStringLen - wipStrings[i].Length) + separator;
+                    else
+                        wipStrings.Add(new string(' ', topStringLen) + separator);
+                }
+            }
+        }
+
+        #endregion
 
     }
 

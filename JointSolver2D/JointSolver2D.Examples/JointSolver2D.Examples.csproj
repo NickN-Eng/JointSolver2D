@@ -57,6 +57,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\JointSolver2D.Accord\JointSolver2D.Accord.csproj">
+      <Project>{3489e381-fbd5-4283-8eb2-09bfe30724c0}</Project>
+      <Name>JointSolver2D.Accord</Name>
+    </ProjectReference>
     <ProjectReference Include="..\JointSolver2D\JointSolver2D.csproj">
       <Project>{3a1f3e54-1089-4dbd-a340-f933e7af828c}</Project>
       <Name>JointSolver2D</Name>

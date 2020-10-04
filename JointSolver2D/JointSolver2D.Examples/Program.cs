@@ -13,7 +13,6 @@ namespace JointSolver2D.Examples
         {
             var example = new RightArrow_2Bar_Example();
 
-
             Console.WriteLine($"Example: {example.Name}");
             
             Stopwatch stopWatch = new Stopwatch();
@@ -29,6 +28,8 @@ namespace JointSolver2D.Examples
                 var bar = analysis.Bars[i];
                 Console.WriteLine($" - Bar {bar.Number}: Force={bar.ForceResult}, Expected={example.ExpectedBarForces[i]}");
             }
+
+            Console.WriteLine(analysis.Solver.GetDebugString_MatrixAXB());
 
             Console.ReadLine();
         }

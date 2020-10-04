@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JointSolver2D.Examples", "J
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JointSolver2D.ResultsViewer.Winforms", "JointSolver2D.ResultsViewer.Winforms\JointSolver2D.ResultsViewer.Winforms.csproj", "{9512B206-5552-450A-B046-5E36303B2AEB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JointSolver2D.Accord", "JointSolver2D.Accord\JointSolver2D.Accord.csproj", "{3489E381-FBD5-4283-8EB2-09BFE30724C0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{9512B206-5552-450A-B046-5E36303B2AEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9512B206-5552-450A-B046-5E36303B2AEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9512B206-5552-450A-B046-5E36303B2AEB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3489E381-FBD5-4283-8EB2-09BFE30724C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3489E381-FBD5-4283-8EB2-09BFE30724C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3489E381-FBD5-4283-8EB2-09BFE30724C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3489E381-FBD5-4283-8EB2-09BFE30724C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
