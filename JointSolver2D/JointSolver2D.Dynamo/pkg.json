@@ -1,0 +1,20 @@
+{
+  "license": "",
+  "file_hash": null,
+  "name": "JointSolver2D",
+  "version": "0.0.0",
+  "description": "A solver of 2D trusses, by method of joints, and virtual work.",
+  "group": "",
+  "keywords": null,
+  "dependencies": [],
+  "contents": "",
+  "engine_version": "2.1.0",
+  "engine": "dynamo",
+  "engine_metadata": "",
+  "site_url": "",
+  "repository_url": "",
+  "contains_binaries": true,
+  "node_libraries": [
+    "JointSolver2D.Dynamo"
+  ]
+}
