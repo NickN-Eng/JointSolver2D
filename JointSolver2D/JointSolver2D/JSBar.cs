@@ -5,6 +5,7 @@ namespace JointSolver2D
     {
         public JSVertex StartVertex;
         public JSVertex EndVertex;
+        public double EA = double.NaN;
 
         /// <summary>
         /// The bar number (zero based index).
@@ -36,7 +37,7 @@ namespace JointSolver2D
         /// </summary>
         public double ForceResult;
 
-        /// <summary>
+        /// <summary>  
         /// Create a bar between 2 nodes.
         /// </summary>
         public JSBar (JSNode startNode, JSNode endNode)

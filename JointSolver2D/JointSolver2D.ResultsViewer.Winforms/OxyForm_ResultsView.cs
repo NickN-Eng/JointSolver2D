@@ -16,10 +16,10 @@ namespace JointSolver2D.ResultsViewer.Winforms
     public partial class OxyForm_ResultsView : Form
     {
         PlotModel Model;
-        JointAnalysis JointAnalysis;
+        JSModel JointModel;
 
 
-        public OxyForm_ResultsView(JointAnalysis jointAnalysis, string title)
+        public OxyForm_ResultsView(JSModel model, string title)
         {
             InitializeComponent();
 
@@ -27,9 +27,9 @@ namespace JointSolver2D.ResultsViewer.Winforms
             this.SizeChanged += Form1_SizeChanged;
 
             Model = new PlotModel { Title = title };
-            JointAnalysis = jointAnalysis;
+            JointModel = model;
 
-            foreach (var bar in JointAnalysis.Bars)
+            foreach (var bar in JointModel.Bars)
             {
                 var series = new LineSeries();
                 series.Points.Add(bar.StartPosition.ToDataPoint());
@@ -46,7 +46,7 @@ namespace JointSolver2D.ResultsViewer.Winforms
                 Model.Annotations.Add(text);
             }
 
-            foreach (var node in JointAnalysis.Nodes)
+            foreach (var node in JointModel.Nodes)
             {
                 var text = new TextAnnotation();
                 text.TextPosition = node.Position.ToDataPoint();

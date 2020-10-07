@@ -14,5 +14,10 @@ namespace JointSolver2D
             Force = forces;
             Node = trussNode;
         }
+
+        public override string ToString()
+        {
+            return $"Point load {Force.ToString_Short()} - at {Node?.Position.ToString_Short()}";
+        }
     }
 }

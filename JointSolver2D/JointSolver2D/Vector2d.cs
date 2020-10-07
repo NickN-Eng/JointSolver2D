@@ -6,14 +6,8 @@ public struct Vector2d
     public static readonly Vector2d UnitX = new Vector2d(1,0);
     public static readonly Vector2d UnitY = new Vector2d(0,1);
 
-    public float X;
-    public float Y;
-
-    public Vector2d(float x, float y)
-    {
-        this.X = x;
-        this.Y = y;
-    }
+    public double X;
+    public double Y;
 
     public Vector2d(double x, double y)
     {
@@ -36,7 +30,7 @@ public struct Vector2d
         return new Vector2d(v1.X * m, v1.Y * m);
     }
 
-    public static float operator *(Vector2d v1, Vector2d v2)
+    public static double operator *(Vector2d v1, Vector2d v2)
     {
         return v1.X * v2.X + v1.Y * v2.Y;
     }
@@ -67,7 +61,12 @@ public struct Vector2d
 
     public override string ToString()
     {
-        return $"[{X},{Y}]";
+        return $"Vector2d [{X},{Y}]";
+    }
+
+    public string ToString_Short(string format = "")
+    {
+        return $"[{X.ToString(format)},{Y.ToString(format)}]";
     }
 
     public override bool Equals(object obj)
@@ -96,7 +95,7 @@ public struct Vector2d
     /// <summary>
     /// Returns the Z component of a 3D dot product
     /// </summary>
-    public static float CrossProduct(Vector2d v1, Vector2d v2)
+    public static double CrossProduct(Vector2d v1, Vector2d v2)
     {
         return (v1.X* v2.Y) - (v1.Y* v2.X);
     }
@@ -104,7 +103,7 @@ public struct Vector2d
     /// <summary>
     /// Returns the dot product of 2 vectors
     /// </summary>
-    public static float DotProduct(Vector2d v1, Vector2d v2)
+    public static double DotProduct(Vector2d v1, Vector2d v2)
     {
         return (v1.X * v2.X) + (v1.Y * v2.Y);
     }

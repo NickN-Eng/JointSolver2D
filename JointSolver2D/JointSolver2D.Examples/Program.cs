@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using JointSolver2D;
 
 namespace JointSolver2D.Examples
 {
@@ -11,25 +12,14 @@ namespace JointSolver2D.Examples
     {
         static void Main(string[] args)
         {
-            var example = new RightArrow_2Bar_Example();
+            var example = new Example1_Simple2Bar();
 
             Console.WriteLine($"Example: {example.Name}");
             
-            Stopwatch stopWatch = new Stopwatch();
-            stopWatch.Start();
             var analysis = example.DoAnalysis();
-            stopWatch.Stop();
 
-            Console.WriteLine($"Completed in {stopWatch.Elapsed.TotalMilliseconds} milliseconds");
-            Console.WriteLine("Bar forces as follows:");
-
-            for (int i = 0; i < analysis.Bars.Count; i++)
-            {
-                var bar = analysis.Bars[i];
-                Console.WriteLine($" - Bar {bar.Number}: Force={bar.ForceResult}, Expected={example.ExpectedBarForces[i]}");
-            }
-
-            Console.WriteLine(analysis.Solver.GetDebugString_MatrixAXB());
+            Console.WriteLine();
+            Console.WriteLine(analysis.WriteReport());
 
             Console.ReadLine();
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace JointSolver2D
@@ -58,14 +59,26 @@ namespace JointSolver2D
         /// <summary> Vector B (for debug only). </summary>
         public abstract double[] B_Array { get; }
 
-        /// <summary> Vector X (for debug only). </summary>
+        /// <summary> The last Vector X (for debug only). </summary>
         public double[] X_Array { get; private set; }
+
+
+
+        /// <summary>
+        /// The smallest absolute value of bar force/reaction which will be recorded.
+        /// This is necessary because the least squares method may result in very small force values where the result should be 0
+        /// </summary>
+        public const double MinForceValue = 0.0001;
+
+        protected internal int EquationNo_GlobalFx => NumberOfEquations - 3;
+        protected internal int EquationNo_GlobalFy => NumberOfEquations - 2;
+        protected internal int EquationNo_GlobalM => NumberOfEquations - 1;
 
         /// <summary>
         /// Performs the analysis: populates bars with bar forces and nodes with node reactions.
         /// </summary>
         /// <param name="jointAnalysis">The joint analysis to be updated.</param>
-        public void SolveForces(JointAnalysis jointAnalysis)
+        public void SolveForces(JSModel jointAnalysis)
         {
             var Nodes = jointAnalysis.Nodes;
             var Bars = jointAnalysis.Bars;
@@ -131,21 +144,33 @@ namespace JointSolver2D
             {
                 node.ReactionResult = new Vector2d();
                 if (node.XRestrained)
-                    node.ReactionResult.X = (float)xResult[node.VariableNumber_Rx];
+                {
+                    var value = xResult[node.VariableNumber_Rx];
+                    if(Math.Abs(value) > MinForceValue)
+                        node.ReactionResult.X = value;
+                }
                 if (node.YRestrained)
-                    node.ReactionResult.Y = (float)xResult[node.VariableNumber_Ry];
+                {
+                    var value = xResult[node.VariableNumber_Ry];
+                    if (Math.Abs(value) > MinForceValue)
+                        node.ReactionResult.Y = value;
+                }
             }
 
             foreach (var bar in Bars)
             {
-                bar.ForceResult = (float)xResult[bar.Number];
+                var value = xResult[bar.Number];
+                bar.ForceResult = Math.Abs(value) > MinForceValue ? value : 0;
             }
 
             X_Array = xResult;
+
         }
 
         private void AddNodeXEquilibrium(JSNode node, int equationRowNo)
         {
+            if (equationRowNo != node.EquationNo_Fx) throw new Exception("Check why these numbers are not equal!!");
+
             foreach (var vert in node.Vertices)
             {
                 var otherNode = vert.GetOtherVertex().Node;
@@ -162,6 +187,8 @@ namespace JointSolver2D
 
         private void AddNodeYEquilibrium(JSNode node, int equationRowNo)
         {
+            if (equationRowNo != node.EquationNo_Fy) throw new Exception("Check why these numbers are not equal!!");
+
             foreach (var vert in node.Vertices)
             {
                 var otherNode = vert.GetOtherVertex().Node;
@@ -178,6 +205,8 @@ namespace JointSolver2D
 
         private void AddGlobalXEquilibrium(IList<JSNode> nodes, int equationRowNo)
         {
+            if (equationRowNo != EquationNo_GlobalFx) throw new Exception("Check why these numbers are not equal!!");
+
             double totalAppliedXForce = 0;
             foreach (var node in nodes)
             {
@@ -191,6 +220,8 @@ namespace JointSolver2D
 
         private void AddGlobalYEquilibrium(IList<JSNode> nodes, int equationRowNo)
         {
+            if (equationRowNo != EquationNo_GlobalFy) throw new Exception("Check why these numbers are not equal!!");
+
             double totalAppliedYForce = 0;
             foreach (var node in nodes)
             {
@@ -204,6 +235,8 @@ namespace JointSolver2D
 
         private void AddGlobalMomentEquilibrium(IList<JSNode> nodes, int equationRowNo)
         {
+            if (equationRowNo != EquationNo_GlobalM) throw new Exception("Check why these numbers are not equal!!");
+            
             double totalAppliedMoment = 0;
             foreach (var node in nodes)
             {
@@ -219,11 +252,62 @@ namespace JointSolver2D
             AddToVectorB(equationRowNo, -totalAppliedMoment);
         }
 
-        public void SolveDeflections()
-        {
 
+        public void SolveDeflections(JSModel model)
+        {
+            var LoverAE = new double[model.Bars.Count];
+            foreach (var bar in model.Bars)
+            {
+                LoverAE[bar.Number] = bar.Length / (double.IsNaN(bar.EA) ? model.EA_default : bar.EA);
+            }
+
+            foreach (var node in model.Nodes)
+            {
+                var defl = new Vector2d();
+                if (!node.XRestrained) defl.X = CalculateDeflection(node, GetVirtualVectorB_FromVirtualForceFx(node), LoverAE);
+                if (!node.YRestrained) defl.Y = CalculateDeflection(node, GetVirtualVectorB_FromVirtualForceFy(node), LoverAE);
+                node.Deflection = defl;
+            }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="virtualVectorB"></param>
+        /// <param name="LoverAE">L/AE. A vector with a value for every bar.</param>
+        /// <returns></returns>
+        private double CalculateDeflection(JSNode node, double[] virtualVectorB, double[] LoverAE)
+        {
+            var virtualX = SolveXForGivenB(virtualVectorB);
+            var realX = X_Array;
+
+            double workDone = 0;
+            for (int i = 0; i < LoverAE.Length; i++)
+            {
+                workDone += virtualX[i] * realX[i] * LoverAE[i];
+            }
+            //deflection = workDone / virtual load (1)
+            return workDone;
+        }
+
+        private double[] GetVirtualVectorB_FromVirtualForceFx(JSNode node)
+        {
+            var result = new double[NumberOfEquations];
+            result[node.EquationNo_Fx] = -1;
+            result[EquationNo_GlobalFx] = -1;
+            result[EquationNo_GlobalM] = node.Position.Y * 1;
+            return result;
+        }
+
+        private double[] GetVirtualVectorB_FromVirtualForceFy(JSNode node)
+        {
+            var result = new double[NumberOfEquations];
+            result[node.EquationNo_Fy] = -1;
+            result[EquationNo_GlobalFy] = -1;
+            result[EquationNo_GlobalM] = -node.Position.X * 1;
+            return result;
+        }
 
         #region Matrix Printing
 
@@ -308,6 +392,8 @@ namespace JointSolver2D
         }
 
         #endregion
+
+
 
     }
 

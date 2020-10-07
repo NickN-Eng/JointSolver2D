@@ -17,7 +17,7 @@ namespace JointSolver2D.ResultsViewer.Winforms
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            var example = new Examples.RightArrow_2Bar_Example();
+            var example = new Examples.Example1_Simple2Bar();
             Application.Run(new OxyForm_ResultsView(example.DoAnalysis(), example.Name + " Example"));
         }
     }

@@ -18,7 +18,15 @@ namespace JointSolver2D
 
         public HashSet<JSVertex> Vertices = new HashSet<JSVertex>(); //Populated when the nodes are resolved
 
+        /// <summary>
+        /// The order of this node. 
+        /// </summary>
         public int Number { get; protected internal set; }
+
+        protected internal int EquationNo_Fx => Number * 2;
+        protected internal int EquationNo_Fy => Number * 2 + 1;
+
+
 
         /// <summary>
         /// The index of vector x to which Rx of this node corresponds (where the bar/node forces are solved by the system of equations Ax = B)
@@ -42,6 +50,11 @@ namespace JointSolver2D
         /// </summary>
         public Vector2d ReactionResult;
 
+        /// <summary>
+        /// The deflection at this node (populated after a JointAnalysis).
+        /// </summary>
+        public Vector2d Deflection;
+
         public JSNode(Vector2d position, bool xRestrained = false, bool yRestrained = false)
         {
             Position = position;
@@ -59,6 +72,8 @@ namespace JointSolver2D
             VariableNumber_Rx = -1;
             VariableNumber_Ry = -1;
             AppliedForces = new Vector2d();
+            //ReactionResult = new Vector2d(); //These values are set by the Solver so do not need to be initialised to zero
+            //Deflection = new Vector2d();
         }
     }
 

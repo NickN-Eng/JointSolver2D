@@ -1,0 +1,17 @@
+﻿<?xml version="1.0"?>
+<doc>
+  <assembly>
+    <name>JointSolver2D.Dynamo</name>
+  </assembly>
+  <namespaces>
+    <!--Remap Namespaces-->
+    <namespace name="JointSolver2D.Dynamo">
+      <category>JointSolver2D</category>
+    </namespace>
+  </namespaces>
+  <classes>
+    <!--Remap Class Names-->
+    <!--<class name="Autodesk.Dynamo.MeshToolkit.Display.MeshDisplay" shortname="MeshDisplay"/>
+    <class name="Autodesk.Dynamo.MeshToolkit.Mesh" shortname="Mesh"/>-->
+  </classes>
+</doc>

@@ -4,27 +4,27 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using JointSolver2D;
-using JointSolver2D.Accord;
+
 namespace JointSolver2D.Examples
 {
     public interface IExample
     {
         string Name { get; }
 
-        JointAnalysis DoAnalysis();
+        JSModel DoAnalysis();
 
         double[] ExpectedBarForces { get; }
     }
 
-    public class RightArrow_2Bar_Example : IExample
+    public class Example1_Simple2Bar : IExample
     {
-        public string Name => "RightArrow 2Bar";
+        public string Name => "Example1_Simple2Bar";
 
         private double[] _ExpectedBarForces => new double[] { 0.71, -0.71 };
 
         public double[] ExpectedBarForces => _ExpectedBarForces;
 
-        public JointAnalysis DoAnalysis()
+        public JSModel DoAnalysis()
         {
             var lowerSupportNode = new JSNode(new Vector2d(0, 0)) { XRestrained = true, YRestrained = true };
             var upperSupportNode = new JSNode(new Vector2d(0, 10)) { XRestrained = true, YRestrained = true };
@@ -38,7 +38,7 @@ namespace JointSolver2D.Examples
             var upperBar = new JSBar(upperSupportNode, forceNode);
             var bars = new JSBar[] { upperBar, lowerBar };
 
-            var analyser = new JointAnalysis(new LeastSq_Solver());
+            var analyser = new JSModel();
             analyser.AddItems(bars, nodes, forces);
             analyser.Solve();
             return analyser;
