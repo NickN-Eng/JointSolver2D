@@ -61,7 +61,7 @@ public struct Vector2d
 
     public override string ToString()
     {
-        return $"Vector2d [{X},{Y}]";
+        return $"Vector2d {{{X},{Y}}}";
     }
 
     public string ToString_Short(string format = "")

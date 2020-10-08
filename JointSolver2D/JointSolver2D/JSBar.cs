@@ -76,6 +76,13 @@ namespace JointSolver2D
             EndVertex = new JSVertex(endNode, this);
         }
 
+        public JSBar(JSBar bar)
+        {
+            StartVertex = bar.StartVertex;
+            EndVertex = bar.EndVertex;
+            EA = bar.EA;
+        }
+
         protected internal void Reset(int newNumber = -1)
         {
             Number = newNumber;

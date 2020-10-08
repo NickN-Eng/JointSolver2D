@@ -1,0 +1,25 @@
+﻿Node plan:
+
+#Model creation
+
+Construct JSNode
+
+Construct JSBar
+
+Construct JSPointLoad
+
+
+#Analysis and results
+
+Analysis (JSNodes, JSBars, JSPtLoads => JSNodeResults, JSBarResults)
+
+JSNodeResult
+    Original position
+    Deflected position
+    Applied forces
+    Reaction
+
+JSBarResult
+    Original bar line
+    Deflected bar line
+    BarForce

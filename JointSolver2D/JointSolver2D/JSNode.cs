@@ -55,6 +55,13 @@ namespace JointSolver2D
         /// </summary>
         public Vector2d Deflection;
 
+        public JSNode(JSNode jSNode)
+        {
+            Position = jSNode.Position;
+            XRestrained = jSNode.XRestrained;
+            YRestrained = jSNode.YRestrained;
+        }
+
         public JSNode(Vector2d position, bool xRestrained = false, bool yRestrained = false)
         {
             Position = position;
@@ -74,6 +81,11 @@ namespace JointSolver2D
             AppliedForces = new Vector2d();
             //ReactionResult = new Vector2d(); //These values are set by the Solver so do not need to be initialised to zero
             //Deflection = new Vector2d();
+        }
+
+        public override string ToString()
+        {
+            return $"{nameof(JSNode)} at {Position.ToString_Short()}";
         }
     }
 

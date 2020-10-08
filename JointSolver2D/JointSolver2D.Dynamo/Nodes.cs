@@ -12,6 +12,23 @@ namespace JointSolver2D.Dynamo
 {
     //Todo, look into default values for dynamo!!!
 
+    //Nodes WIP
+    /*
+        JSNode
+        JSBar
+        JSPointLoad
+        Analysis (JSNodes, JSBars, JSPtLoads => JSNodeResults, JSBarResults)
+        JSNodeResult
+            Original position
+            Deflected position
+            Applied forces
+            Reaction
+        JSBarResult
+            Original bar line
+            Deflected bar line
+            BarForce
+    */
+
     /// <summary>
     /// Input data used to create a JSNode within the core library.
     /// </summary>
@@ -25,35 +42,6 @@ namespace JointSolver2D.Dynamo
 
         [NodeCategory("Create")]
         public static js.JSNode ByCoordinates_Partial(double x, double y, bool xRestrained, bool yRestrained) => new js.JSNode(new Vector2d(x, y), xRestrained, yRestrained);
-        //private Vector2d Position;
-
-        ///// <summary>
-        ///// Set to true if the X direction of this node is restrained.
-        ///// </summary>
-        //private bool XRestrained;
-
-        ///// <summary>
-        ///// Set to true if the Y direction of this node is restrained.
-        ///// </summary>
-        //private bool YRestrained;
-
-        //public JSNode(Vector2d position, bool xRestrained = false, bool yRestrained = false)
-        //{
-        //    Position = position;
-        //    XRestrained = xRestrained;
-        //    YRestrained = yRestrained;
-        //}
-
-        //public js.JSNode CreateNode() => new js.JSNode(Position, XRestrained, YRestrained);
-
-        //[NodeCategory("Create")]
-        //public static JSNode ByCoordinates_Released(double x, double y) => new JSNode(new Vector2d(x, y));
-
-        //[NodeCategory("Create")]
-        //public static JSNode ByCoordinates_Restrained(double x, double y) => new JSNode(new Vector2d(x, y), true, true);
-
-        //[NodeCategory("Create")]
-        //public static JSNode ByCoordinates_Partial(double x, double y, bool xRestrained, bool yRestrained) => new JSNode(new Vector2d(x, y), xRestrained, yRestrained);
 
     }
 
@@ -82,47 +70,6 @@ namespace JointSolver2D.Dynamo
         /// </summary>
         public static js.JSBar ByStartPtEndNode(Vector2d startPoint, js.JSNode endNode) => new js.JSBar(startPoint, endNode);
 
-        //public JSVertex StartVertex;
-        //public JSVertex EndVertex;
-
-        ///// <summary>
-        ///// Create a bar between 2 nodes.
-        ///// </summary>
-        //public JSBar(JSNode startNode, JSNode endNode)
-        //{
-        //    StartVertex = new JSVertex(startNode, this);
-        //    EndVertex = new JSVertex(endNode, this);
-        //}
-
-        ///// <summary>
-        ///// Create a bar between 2 positions (unconnected to nodes).
-        ///// Node connections will be formed when this bar is added to a JointAnalysis model.
-        ///// </summary>
-        //public JSBar(Vector2d startPoint, Vector2d endPoint)
-        //{
-        //    StartVertex = new JSVertex(startPoint, this);
-        //    EndVertex = new JSVertex(endPoint, this);
-        //}
-
-        ///// <summary>
-        ///// Create a bar between a node and a point positions (unconnected to nodes).
-        ///// The unconnected vertex position will be connected to a node when this bar is added to a JointAnalysis model.
-        ///// </summary>
-        //public JSBar(JSNode startNode, Vector2d endPoint)
-        //{
-        //    StartVertex = new JSVertex(startNode, this);
-        //    EndVertex = new JSVertex(endPoint, this);
-        //}
-
-        ///// <summary>
-        ///// Create a bar between a node and a point positions (unconnected to nodes).
-        ///// The unconnected vertex position will be connected to a node when this bar is added to a JointAnalysis model.
-        ///// </summary>
-        //public JSBar(Vector2d startPoint, JSNode endNode)
-        //{
-        //    StartVertex = new JSVertex(startPoint, this);
-        //    EndVertex = new JSVertex(endNode, this);
-        //}
     }
 
     public static class JSLoads
